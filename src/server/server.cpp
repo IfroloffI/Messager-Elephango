@@ -1,6 +1,3 @@
-//
-// Created by Ilya on 02.06.2024.
-//
 #include "server.h"
 #include <iostream>
 
@@ -14,7 +11,7 @@ Server::Server(unsigned short port) : running(true) {
 
     // Подключение к базе данных
     dbConnection = PQconnectdb(
-            "user=yourusername dbname=yourdbname password=yourpassword hostaddr=127.0.0.1 port=5432");
+            "user=postgres dbname=elephango password=123456 hostaddr=127.0.0.1 port=5432");
     if (PQstatus(dbConnection) != CONNECTION_OK) {
         std::cerr << "Error connecting to database: " << PQerrorMessage(dbConnection) << std::endl;
     }
@@ -38,7 +35,7 @@ Server::~Server() {
 void Server::start() {
     while (running) {
         auto *client = new sf::TcpSocket();
-        if (listener.accept(client) == sf::Socket::Done) {
+        if (listener.accept(*client) == sf::Socket::Done) {
             std::lock_guard<std::mutex> lock(clientsMutex);
             clients.push_back(client);
             std::thread(&Server::handleClient, this, client).detach();

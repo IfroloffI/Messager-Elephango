@@ -1,7 +1,3 @@
-//
-// Created by Ilya on 02.06.2024.
-//
-
 #ifndef MESSAGER_ELEPHANGO_SERVER_H
 #define MESSAGER_ELEPHANGO_SERVER_H
 
