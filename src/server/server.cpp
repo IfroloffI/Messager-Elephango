@@ -1,7 +1,6 @@
 //
 // Created by Ilya on 02.06.2024.
 //
-
 #include "server.h"
 #include <iostream>
 
@@ -12,6 +11,12 @@ Server::Server(unsigned short port) : running(true) {
         std::cout << "Server started on port " << port << std::endl;
     }
     acceptThread = new std::thread(&Server::start, this);
+
+    // Подключение к базе данных
+    dbConnection = PQconnectdb("user=yourusername dbname=yourdbname password=yourpassword hostaddr=127.0.0.1 port=5432");
+    if (PQstatus(dbConnection) != CONNECTION_OK) {
+        std::cerr << "Error connecting to database: " << PQerrorMessage(dbConnection) << std::endl;
+    }
 }
 
 Server::~Server() {
@@ -19,6 +24,10 @@ Server::~Server() {
     listener.close();
     acceptThread->join();
     delete acceptThread;
+
+    // Закрытие соединения с базой данных
+    PQfinish(dbConnection);
+
     for (auto client : clients) {
         client->disconnect();
         delete client;
@@ -44,6 +53,7 @@ void Server::handleClient(sf::TcpSocket* client) {
         std::string message;
         packet >> message;
         broadcastMessage(message, client);
+        storeMessageInDB(message, client->getRemoteAddress().toString());
         packet.clear();
     }
     std::lock_guard<std::mutex> lock(clientsMutex);
@@ -61,4 +71,13 @@ void Server::broadcastMessage(const std::string& message, sf::TcpSocket* sender)
             client->send(packet);
         }
     }
+}
+
+void Server::storeMessageInDB(const std::string& message, const std::string& sender) {
+    std::string query = "INSERT INTO messages (sender, message) VALUES ('" + sender + "', '" + message + "')";
+    PGresult* res = PQexec(dbConnection, query.c_str());
+    if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+        std::cerr << "Error inserting message into database: " << PQerrorMessage(dbConnection) << std::endl;
+    }
+    PQclear(res);
 }

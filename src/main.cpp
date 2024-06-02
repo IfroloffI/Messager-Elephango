@@ -4,8 +4,7 @@
 #include <thread>
 #include <vector>
 #include <mutex>
-#include "server/server.h"
-
+#include "server/server.h"  // Подключение server.h
 
 std::vector<std::string> messages;
 std::mutex messagesMutex;
@@ -31,7 +30,7 @@ int main() {
         Server server(1234);
         server.start();
     } else {
-        sf::RenderWindow window(sf::VideoMode(800, 600), "Messenger");
+        sf::RenderWindow window(sf::VideoMode(800, 600), "Messanger");
 
         sf::Font font;
         if (!font.loadFromFile("arial.ttf")) {

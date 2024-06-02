@@ -17,4 +17,8 @@ set(HEADERS
 add_executable(${PROJECT_NAME} main.cpp ${HEADERS} ${SOURCES})
 
 include_directories("C:\\SFML/include")
+include_directories("{path_to_postgreSQL}/include")
+
+
 target_link_libraries(${PROJECT_NAME} sfml-network sfml-graphics sfml-window sfml-system)
+target_link_libraries(${PROJECT_NAME} "{path_to_postgreSQL}/lib/libpq.lib")
