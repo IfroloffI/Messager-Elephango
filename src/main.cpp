@@ -1,10 +1,10 @@
-#include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <thread>
 #include <vector>
 #include <mutex>
-#include "server.h"  // Подключение server.h
+#include "server/server.h"  // Подключение server.h
 
 std::vector<std::string> messages;
 std::mutex messagesMutex;
