@@ -5,9 +5,6 @@
 #ifndef MESSAGER_ELEPHANGO_SERVER_H
 #define MESSAGER_ELEPHANGO_SERVER_H
 
-#ifndef SERVER_H
-#define SERVER_H
-
 #include <SFML/Network.hpp>
 #include <vector>
 #include <thread>
@@ -30,6 +27,8 @@ private:
 
     void storeMessageInDB(const std::string &message, const std::string &sender);
 
+    bool authenticateUser(const std::string &username, const std::string &password);
+
     sf::TcpListener listener;
     std::vector<sf::TcpSocket *> clients;
     std::mutex clientsMutex;
@@ -38,8 +37,5 @@ private:
 
     PGconn *dbConnection;
 };
-
-#endif // SERVER_H
-
 
 #endif //MESSAGER_ELEPHANGO_SERVER_H

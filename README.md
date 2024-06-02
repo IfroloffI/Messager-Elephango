@@ -5,11 +5,17 @@
 
 Создание Тестовой БД:
 
-### 
+### Пользователи
     CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
     sender VARCHAR(255),
     message TEXT,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
-###
+### Сообщения
+    CREATE TABLE messages (
+    id SERIAL PRIMARY KEY,
+    sender VARCHAR(255),
+    message TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
